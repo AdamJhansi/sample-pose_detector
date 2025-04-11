@@ -7,23 +7,23 @@ class ExerciseDetector:
         self.pushup_state = "up"  # "up" or "down"
         self.pushup_count = 0
         self.pushup_angle = 0
-        self.pushup_threshold_up = 160  # Angle when arms are straight
-        self.pushup_threshold_down = 90  # Angle when arms are bent
-        self.pushup_stability_threshold = 5  # Minimum angle change to count as movement
+        self.pushup_threshold_up = 140  # Lebih rendah dari sebelumnya (160)
+        self.pushup_threshold_down = 100  # Lebih tinggi dari sebelumnya (90)
+        self.pushup_stability_threshold = 10  # Lebih toleran terhadap gerakan
         self.last_pushup_angle = 0
         
         # Squat states and thresholds
         self.squat_state = "up"  # "up" or "down"
         self.squat_count = 0
         self.squat_angle = 0
-        self.squat_threshold_up = 160  # Angle when legs are straight
-        self.squat_threshold_down = 90  # Angle when legs are bent
-        self.squat_stability_threshold = 5  # Minimum angle change to count as movement
+        self.squat_threshold_up = 140  # Lebih rendah dari sebelumnya (160)
+        self.squat_threshold_down = 100  # Lebih tinggi dari sebelumnya (90)
+        self.squat_stability_threshold = 10  # Lebih toleran terhadap gerakan
         self.last_squat_angle = 0
         
         # Stability check
         self.stable_frames = 0
-        self.required_stable_frames = 5  # Number of frames to consider movement stable
+        self.required_stable_frames = 3  # Lebih sedikit frame yang dibutuhkan
         
     def detect_pushup(self, landmarks):
         """Detect push-up movement and count repetitions"""
@@ -61,8 +61,8 @@ class ExerciseDetector:
         # Calculate body angle to ensure proper form
         body_angle = calculate_angle(left_shoulder, left_hip, right_hip)
         
-        # Only count if body is relatively straight (within 10 degrees of horizontal)
-        if abs(body_angle - 180) > 10:
+        # Lebih toleran terhadap posisi tubuh (dalam 20 derajat)
+        if abs(body_angle - 180) > 20:
             return self.pushup_angle
         
         # Check for stable movement
@@ -119,8 +119,8 @@ class ExerciseDetector:
         # Calculate body angle to ensure proper form
         body_angle = calculate_angle(left_shoulder, left_hip, right_hip)
         
-        # Only count if body is relatively vertical (within 20 degrees)
-        if abs(body_angle - 180) > 20:
+        # Lebih toleran terhadap posisi tubuh (dalam 30 derajat)
+        if abs(body_angle - 180) > 30:
             return self.squat_angle
         
         # Check for stable movement
