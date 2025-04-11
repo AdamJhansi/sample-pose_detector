@@ -48,11 +48,6 @@ def main():
         # Process frame for pose detection
         results = pose_detector.process_frame(frame)
         
-        # Create overlay for information display
-        overlay = frame.copy()
-        cv2.rectangle(overlay, (0, 0), (300, 250), (0, 0, 0), -1)
-        cv2.addWeighted(overlay, 0.5, frame, 0.5, 0, frame)
-        
         # Draw landmarks and detect exercises if pose is detected
         if results.pose_landmarks:
             # Draw landmarks
@@ -67,60 +62,42 @@ def main():
             
             # Display information with better formatting
             # Push-up information
-            cv2.putText(frame, "Push-up Counter", (10, 30), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-            cv2.putText(frame, f"Count: {pushup_count}", (10, 60), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-            cv2.putText(frame, f"Angle: {int(pushup_angle)}", (10, 90), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            cv2.putText(frame, "Push-up Counter", (10, 25), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+            cv2.putText(frame, f"Count: {pushup_count}", (10, 45), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+            cv2.putText(frame, f"Angle: {int(pushup_angle)}", (10, 65), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
             
             # Squat information
-            cv2.putText(frame, "Squat Counter", (10, 130), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-            cv2.putText(frame, f"Count: {squat_count}", (10, 160), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-            cv2.putText(frame, f"Angle: {int(squat_angle)}", (10, 190), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            cv2.putText(frame, "Squat Counter", (10, 90), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+            cv2.putText(frame, f"Count: {squat_count}", (10, 110), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+            cv2.putText(frame, f"Angle: {int(squat_angle)}", (10, 130), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
             
             # Status information
-            status_color = (0, 255, 0)  # Green for good detection
+            status_color = (255, 255, 255)  # White for good detection
             status_text = "Pose Detected"
         else:
-            status_color = (0, 0, 255)  # Red for no detection
+            status_color = (255, 255, 255)  # White for no detection
             status_text = "No Pose Detected"
         
         # Display status
-        cv2.putText(frame, status_text, (10, 220), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, status_color, 2)
+        cv2.putText(frame, status_text, (10, 155), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, status_color, 1)
         
         # Calculate and display FPS
         current_time = time.time()
         fps = 1 / (current_time - prev_time) if (current_time - prev_time) > 0 else 0
         prev_time = current_time
-        cv2.putText(frame, f"FPS: {int(fps)}", (10, 250), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        cv2.putText(frame, f"FPS: {int(fps)}", (10, 175), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
         
-        # Draw close button with better styling
-        button_text = "Exit (Q)"
-        button_pos = (frame.shape[1] - 100, 20)
-        button_size = (80, 30)
-        
-        # Draw button background
-        cv2.rectangle(frame, button_pos, 
-                     (button_pos[0] + button_size[0], button_pos[1] + button_size[1]),
-                     (0, 0, 255), -1)
-        
-        # Draw button border
-        cv2.rectangle(frame, button_pos, 
-                     (button_pos[0] + button_size[0], button_pos[1] + button_size[1]),
-                     (255, 255, 255), 2)
-        
-        # Add text to button
-        text_size = cv2.getTextSize(button_text, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)[0]
-        text_x = button_pos[0] + (button_size[0] - text_size[0]) // 2
-        text_y = button_pos[1] + (button_size[1] + text_size[1]) // 2
-        cv2.putText(frame, button_text, (text_x, text_y), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        # Display exit text
+        cv2.putText(frame, "Press 'Q' to Exit", (10, 195), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
         
         # Display frame
         cv2.imshow('Pose Detection', frame)
